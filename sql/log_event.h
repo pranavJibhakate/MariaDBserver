@@ -3743,7 +3743,7 @@ public:
   bool is_valid() const { return 1; }
 };
 #endif
-char *str_to_hex(char *to, const char *from, size_t len);
+char *str_to_hex(char *to, const uchar *from, size_t len);
 
 /**
   @class Annotate_rows_log_event
