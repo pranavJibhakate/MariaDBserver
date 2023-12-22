@@ -10,9 +10,9 @@ set global sql_error_log_rate=1;
 select * from t_doesnt_exist;
 
 let $MYSQLD_DATADIR= `SELECT @@datadir`;
---let SEARCH_FILE= $MYSQLD_DATADIR/sql_errors.log
---let LINES_TO_READ=1
---replace_regex /[1-9]* test [1-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [ 0-9][0-9]:[0-9][0-9]:[0-9][0-9] [^E]*/THREAD_ID DATABASE_NAME TIME HOSTNAME /
---source include/read_head.inc
+let grep_file=$MYSQLD_DATADIR/sql_errors.log;
+let grep_regex=t_doesnt_exist;
+replace_regex /[1-9]* test [1-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9] [ 0-9][0-9]:[0-9][0-9]:[0-9][0-9] [^E]*/THREAD_ID DATABASE_NAME TIME HOSTNAME /;
+source include/grep.inc;
 
 remove_file $MYSQLD_DATADIR/sql_errors.log;
