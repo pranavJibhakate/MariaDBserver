@@ -226,7 +226,7 @@ extern ulong delayed_insert_threads, delayed_insert_writes;
 extern ulong delayed_rows_in_use,delayed_insert_errors;
 extern Atomic_counter<uint32_t> slave_open_temp_tables;
 extern Atomic_counter<ulonglong> sending_new_binlog_file;
-extern ulong slave_connections_needed_for_purge;
+extern uint slave_connections_needed_for_purge;
 extern ulonglong query_cache_size;
 extern ulong query_cache_limit;
 extern ulong query_cache_min_res_unit;

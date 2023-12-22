@@ -1285,13 +1285,13 @@ static Sys_var_ulonglong Sys_binlog_space_limit(
        NO_MUTEX_GUARD, NOT_IN_BINLOG, ON_CHECK(0),
        ON_UPDATE(update_binlog_space_limit));
 
-static Sys_var_ulong Sys_slave_connections_needed_for_purge(
+static Sys_var_uint Sys_slave_connections_needed_for_purge(
       "slave_connections_needed_for_purge",
       "Minimum number of connected slaves required for automatic binary "
       "log purge with max_binlog_total_size, binlog_expire_logs_seconds "
       "or binlog_expire_logs_days.",
        GLOBAL_VAR(slave_connections_needed_for_purge), CMD_LINE(REQUIRED_ARG),
-       VALID_RANGE(0, ULONG_MAX), DEFAULT(1), BLOCK_SIZE(1),
+       VALID_RANGE(0, UINT_MAX), DEFAULT(1), BLOCK_SIZE(1),
        NO_MUTEX_GUARD, NOT_IN_BINLOG, ON_CHECK(0),
        ON_UPDATE(update_binlog_space_limit));
 
