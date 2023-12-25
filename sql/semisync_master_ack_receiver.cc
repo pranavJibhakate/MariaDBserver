@@ -25,7 +25,7 @@ extern PSI_cond_key key_COND_ack_receiver;
 extern PSI_thread_key key_thread_ack_receiver;
 #endif
 
-int global_ack_signal_fd= -1;
+my_socket global_ack_signal_fd= -1;
 
 /* Callback function of ack receive thread */
 pthread_handler_t ack_receive_handler(void *arg)
@@ -242,6 +242,13 @@ void Ack_receiver::run()
   Select_socket_listener listener(m_slaves);
 #endif //HAVE_POLL
 
+  if (listener.got_error())
+  {
+    sql_print_error("Got error %M starting ack receiver thread",
+                    listener.got_error());
+    return;
+  }
+
   sql_print_information("Starting ack receiver thread");
   thd->system_thread= SYSTEM_THREAD_SEMISYNC_MASTER_BACKGROUND;
   thd->thread_stack= (char*) &thd;
@@ -258,7 +265,7 @@ void Ack_receiver::run()
 
   while (1)
   {
-    int ret, slave_count;
+    int ret, slave_count= 0;
     Slave *slave;
 
     mysql_mutex_lock(&m_mutex);
