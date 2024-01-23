@@ -5014,6 +5014,8 @@ public:
    :Item_literal(thd),
     m_value(value)
   {
+    DBUG_ASSERT(value.is_zero_datetime() ||
+                !value.to_timestamp().fraction_remainder(dec));
     collation= DTCollation_numeric();
     decimals= dec;
   }

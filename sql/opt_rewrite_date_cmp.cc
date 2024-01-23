@@ -288,10 +288,13 @@ Item *Date_cmp_func_rewriter::create_end_bound()
     const_arg_ts.hour= 23;
     const_arg_ts.minute= TIME_MAX_MINUTE;
     const_arg_ts.second= TIME_MAX_SECOND;
-    const_arg_ts.second_part= TIME_MAX_SECOND_PART;
+    const_arg_ts.second_part= TIME_MAX_SECOND_PART -
+                              my_time_fraction_remainder(TIME_MAX_SECOND_PART,
+                                                         field_ref->decimals);
     if (check_datetime_range(&const_arg_ts))
       return nullptr;
     res= new (thd->mem_root) Item_datetime(thd);
+    res->decimals= field_ref->decimals;
     res->set(&const_arg_ts);
     break;
   case Item_func::DATE_FUNC:
@@ -300,6 +303,7 @@ Item *Date_cmp_func_rewriter::create_end_bound()
     else
     {
       res= new (thd->mem_root) Item_datetime(thd);
+      res->decimals= field_ref->decimals;
       Datetime const_arg_dt(current_thd, const_arg_value);
       if (!const_arg_dt.is_valid_datetime())
         return nullptr;
@@ -307,7 +311,9 @@ Item *Date_cmp_func_rewriter::create_end_bound()
       const_arg_ts.hour= 23;
       const_arg_ts.minute= TIME_MAX_MINUTE;
       const_arg_ts.second= TIME_MAX_SECOND;
-      const_arg_ts.second_part=TIME_MAX_SECOND_PART;
+      const_arg_ts.second_part= TIME_MAX_SECOND_PART -
+                                my_time_fraction_remainder(TIME_MAX_SECOND_PART,
+                                                           field_ref->decimals);
       const_arg_ts.time_type= MYSQL_TIMESTAMP_DATETIME;
       res->set(&const_arg_ts);
     }
